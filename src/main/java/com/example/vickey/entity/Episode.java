@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Episode {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 자동 생성
     @Column(name = "episode_id")
     private Long episodeId;
 

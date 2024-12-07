@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -40,6 +41,31 @@ public class S3Service {
         this.bucketName = bucketName;
     }
 
+    // 썸네일 사진 파일 업로드
+    public String uploadThumbnail(MultipartFile file) throws IOException {
+        try {
+            // 파일 이름 생성
+            String fileName = "thumbnails/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+            // S3에 파일 업로드
+            s3Client.putObject(
+                    PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(fileName)
+                            .contentType(file.getContentType())
+                            .build(),
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize())
+            );
+
+            // 업로드된 파일의 URL 반환
+            return "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + fileName;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload thumbnail to S3: " + e.getMessage(), e);
+        }
+    }
+
+    //동영상 파일 업로드
     public Map<String, Object> uploadFile(MultipartFile file) throws IOException {
 
         String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();

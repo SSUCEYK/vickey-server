@@ -23,7 +23,7 @@ public class VideoController {
         this.videoService = videoService;
     }
 
-    // 비디오 업로드 : 바로 S3에 동영상을 업로드
+    // 비디오 업로드 : 바로 S3에 동영상을 업로드, DB 추가
     @PostMapping("/upload/{episodeId}")
     public ResponseEntity<String> uploadVideo(
             @RequestParam("file") MultipartFile file,

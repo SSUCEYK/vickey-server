@@ -1,14 +1,17 @@
 package com.example.vickey.service;
 
+import com.example.vickey.S3Service;
 import com.example.vickey.entity.Episode;
 import com.example.vickey.repository.EpisodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,10 +20,12 @@ import java.util.stream.Collectors;
 public class EpisodeService {
 
     private final EpisodeRepository episodeRepository;
+    private final S3Service s3Service;
 
     @Autowired
-    public EpisodeService(EpisodeRepository episodeRepository) {
+    public EpisodeService(EpisodeRepository episodeRepository, S3Service s3Service) {
         this.episodeRepository = episodeRepository;
+        this.s3Service = s3Service;
     }
 
 //    public List<EpisodeTitleCountDto> getEpisodeTitlesAndCounts() {
@@ -31,21 +36,26 @@ public class EpisodeService {
         return episodeRepository.findAll();
     }
 
-    public List<String> getEpisodeThumbnails() {
-//        return episodeRepository.findAll().stream()
-//                .map(Episode::getThumbnailUrl) // thumbnail_url 반환
-//                .collect(Collectors.toList());
-        return episodeRepository.findAllThumbnailUrls();
-    }
+//    public List<String> getEpisodeThumbnails() {
+//        return episodeRepository.findAllThumbnailUrls();
+//    }
 
     public Episode addEpisode(Episode episode) {
-
-        // episodeId 자동 생성
-        Long maxEpisodeId = (long) episodeRepository.findMaxEpisodeId();
-        episode.setEpisodeId(maxEpisodeId + 1);
-
+        System.out.println("EpisodeService/ Received Episode in addEpisode: " + episode);
+        System.out.println("EpisodeService/ AddEpisode.thumbnailUrl:" + episode.getThumbnailUrl());
         return episodeRepository.save(episode);
     }
+
+    public String uploadThumbnail(MultipartFile file) {
+        try {
+            String url = s3Service.uploadThumbnail(file);
+            System.out.println("Uploaded Thumbnail URL: " + url);
+            return url;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload thumbnail to S3: " + e.getMessage(), e);
+        }
+    }
+
 
     public Optional<Episode> getEpisodeById(Long id) {
         return episodeRepository.findById(id);
