@@ -86,7 +86,7 @@ public class EpisodeController {
     }
 
     @GetMapping({"/contentInfo"})
-    public Episode contentInfoEpisodes(@RequestParam Integer contentInfoQuery) {
+    public Episode contentInfoEpisodes(@RequestParam Long contentInfoQuery) {
         return episodeService.contentInfoEpisodes(contentInfoQuery);
     }
 }

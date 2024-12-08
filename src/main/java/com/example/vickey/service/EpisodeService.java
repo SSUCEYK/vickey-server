@@ -89,7 +89,7 @@ public class EpisodeService {
         return episodeRepository.searchEpisodes(searchQuery);
     }
 
-    public Episode contentInfoEpisodes(Integer contentInfoQuery) {
+    public Episode contentInfoEpisodes(Long contentInfoQuery) {
         return episodeRepository.contentInfoEpisodes(contentInfoQuery);
     }
 

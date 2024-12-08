@@ -7,19 +7,23 @@ import java.util.List;
 
 // 컨텐츠 (==episode; 처음 설계 시 이름을 헷갈리게 지정했으니 주의)
 @Entity
+@Table(name = "episode")
 public class Episode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // DB에서 자동 생성
     @Column(name = "episode_id")
     private Long episodeId;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "episode_count", nullable = false)
     private Integer episodeCount;
 
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "released_date")
     private String releasedDate;
 
     @Column(name = "thumbnail_url", columnDefinition = "LONGTEXT")
@@ -28,10 +32,16 @@ public class Episode {
     @Column(name = "cast_list")
     private String castList;
 
-    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Video> videos = new ArrayList<>();
+    @Column(name = "video_urls", columnDefinition = "json")
+    private String videoURLs; //json 문자열 형식의 모든 영상 주소
 
-    // Getters 및 Setters
+//    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Video> videos = new ArrayList<>();
+
+
+
+
+// Getters 및 Setters
 
     public Long getEpisodeId() {
         return episodeId;
@@ -87,5 +97,16 @@ public class Episode {
 
     public void setCastList(String castList) {
         this.castList = castList;
+    }
+
+    public void setEpisodeCount(Integer episodeCount) {
+        this.episodeCount = episodeCount;
+    }
+    public String getVideoURLs() {
+        return videoURLs;
+    }
+
+    public void setVideoURLs(String videoURLs) {
+        this.videoURLs = videoURLs;
     }
 }

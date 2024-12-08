@@ -43,9 +43,10 @@ CREATE TABLE Episode (
     title VARCHAR(255) NOT NULL,
     episode_count INTEGER NOT NULL,
     description TEXT,
-    released_date DATE,
+    released_date TEXT,
     thumbnail_url LONGTEXT,
-    cast_list VARCHAR(255) -- cast가 예약어라 변경
+    cast_list VARCHAR(255), -- cast가 예약어라 변경
+    video_urls TEXT
 );
 
 -- 3. 비디오 테이블 (Videos)
@@ -165,5 +166,9 @@ INSERT INTO Subscription (user_id, start_date, end_date, subscription_type) VALU
 ('1', '2023-12-01', '2024-01-01', 'PREMIUM'),
 ('2', '2023-12-01', '2024-01-01', 'STANDARD'),
 ('3', '2023-12-01', '2024-01-01', 'BASIC');
+
+INSERT INTO episode (episode_id, episode_count, title, cast_list, released_date, description, thumbnail_url, video_urls)
+VALUES (7333, 5, 'The Last Stand', 'William Taylor, Emily White', '2023', 'Everything comes to a dramatic conclusion.', 'https://picsum.photos/900/1850',
+        '["https://d3frntip486vjo.cloudfront.net/Vickey_test_1.MP4", "https://d3frntip486vjo.cloudfront.net/Vickey_test_2.MP4", "https://d3frntip486vjo.cloudfront.net/Vickey_test_3.MP4", "https://d3frntip486vjo.cloudfront.net/Vickey_test_4.MP4", "https://d3frntip486vjo.cloudfront.net/Vickey_test_5.MP4"]');
 
 

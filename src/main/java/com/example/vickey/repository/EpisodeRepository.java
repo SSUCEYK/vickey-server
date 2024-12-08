@@ -28,6 +28,6 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     List<Episode> searchEpisodes(@Param("searchQuery") String var1);
 
     @Query("SELECT e FROM Episode e WHERE e.episodeId = :contentInfoQuery")
-    Episode contentInfoEpisodes(@Param("contentInfoQuery") Integer var1);
+    Episode contentInfoEpisodes(@Param("contentInfoQuery") Long var1);
     // 추가적인 쿼리 메서드
 }
