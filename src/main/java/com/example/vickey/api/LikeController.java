@@ -25,12 +25,22 @@ public class LikeController {
     }
 
     @GetMapping("/user/{userId}/episodes")
-    public List<Episode> getLikedEpisodes(@PathVariable Long userId) {
+    public List<Episode> getLikedEpisodes(@PathVariable String userId) {
         return likeService.getLikedEpisodes(userId);
     }
 
+    @GetMapping("/user/{userId}/episodes/{episodeId}")
+    public ResponseEntity<List<LikedVideosResponse>> getLikedVideosByEpisode(@PathVariable String userId, @PathVariable Long episodeId) {
+        List<LikedVideosResponse> likedVideos = likeService.getLikedVideosByEpisode(userId, episodeId);
+        return ResponseEntity.ok(likedVideos);
+    }
 
-//    @GetMapping("/user/{userId}/episodes/{episodeId}")
+    @GetMapping("/user/{userId}")
+    public List<Like> getUserLikes(@PathVariable String userId) {
+        return likeService.getUserLikes(userId);
+    }
+
+    //    @GetMapping("/user/{userId}/episodes/{episodeId}")
 //    public List<String> getLikedVideosByEpisode(@PathVariable Long userId, @PathVariable Long episodeId) {
 //        List<Like> likes = likeRepository.findAllByUserIdAndVideo_Episode_EpisodeId(userId, episodeId);
 //
@@ -40,15 +50,4 @@ public class LikeController {
 //                .collect(Collectors.toList());
 //    }
 
-    @GetMapping("/user/{userId}")
-    public List<Like> getUserLikes(@PathVariable Long userId) {
-        return likeService.getUserLikes(userId);
-    }
-
-
-    @GetMapping("/user/{userId}/episodes/{episodeId}")
-    public ResponseEntity<List<LikedVideosResponse>> getLikedVideosByEpisode(@PathVariable Long userId, @PathVariable Long episodeId) {
-        List<LikedVideosResponse> likedVideos = likeService.getLikedVideosByEpisode(userId, episodeId);
-        return ResponseEntity.ok(likedVideos);
-    }
 }

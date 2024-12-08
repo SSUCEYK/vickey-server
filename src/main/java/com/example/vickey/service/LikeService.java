@@ -20,11 +20,11 @@ public class LikeService {
         this.likeRepository = likeRepository;
     }
 
-    public List<LikedVideosResponse> getLikedVideosByEpisode(Long userId, Long episodeId) {
+    public List<LikedVideosResponse> getLikedVideosByEpisode(String userId, Long episodeId) {
         return likeRepository.findLikedVideoInfoByUserIdAndEpisodeId(userId, episodeId);
     }
 
-    public List<Episode> getLikedEpisodes(Long userId) {
+    public List<Episode> getLikedEpisodes(String userId) {
         List<Like> likes = likeRepository.findAllByUserId(userId);
 
         return likes.stream()
@@ -32,7 +32,7 @@ public class LikeService {
                 .collect(Collectors.toList());
     }
 
-    public List<Like> getUserLikes(Long userId) {
+    public List<Like> getUserLikes(String userId) {
         return likeRepository.findAllByUserId(userId);
     }
 

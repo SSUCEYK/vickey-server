@@ -24,5 +24,10 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query(value = "SELECT * FROM Episode ORDER BY RANDOM() LIMIT :n", nativeQuery = true)
     List<Episode> findRandomEpisodes(@Param("n") int n);
 
+    @Query("SELECT e FROM Episode e WHERE LOWER(e.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(e.castList) LIKE LOWER(CONCAT('%', :searchQuery, '%'))")
+    List<Episode> searchEpisodes(@Param("searchQuery") String var1);
+
+    @Query("SELECT e FROM Episode e WHERE e.episodeId = :contentInfoQuery")
+    Episode contentInfoEpisodes(@Param("contentInfoQuery") Integer var1);
     // 추가적인 쿼리 메서드
 }

@@ -10,12 +10,11 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false, unique = true)
-    private Long userId;
+    private String userId;
 
     @Column(nullable = false)
-    private String username;
+    private String username = "게스트"; //default
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -29,18 +28,35 @@ public class User {
     @Column(name = "signup_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime signupDate;
 
+    @OneToOne
+    @JoinColumn(name = "subscription")
+    private Subscription subscription;
+
+
+    public void updateSubscribe(Subscription subscription) {
+        this.subscription = subscription;
+    }
+
+
     // Getters and setters
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
 
     @PrePersist
     protected void onCreate() {
         this.signupDate = LocalDateTime.now();
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

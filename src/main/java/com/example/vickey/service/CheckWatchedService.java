@@ -21,7 +21,7 @@ public class CheckWatchedService {
         this.episodeService = episodeService;
     }
 
-    public List<CheckWatchedResponse> getUserHistory(Long userId) {
+    public List<CheckWatchedResponse> getUserHistory(String userId) {
         List<CheckWatched> histories = checkWatchedRepository.findAllByUserId(userId);
 
         return histories.stream().map(history -> {

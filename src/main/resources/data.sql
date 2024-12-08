@@ -4,15 +4,38 @@ DROP TABLE IF EXISTS Videos;
 DROP TABLE IF EXISTS Check_watched;
 DROP TABLE IF EXISTS Likes;
 
+-- +. 구독 테이블 (Subscription)
+CREATE TABLE Subscription (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id VARCHAR(255) UNIQUE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    subscription_type VARCHAR(50) NOT NULL
+);
+
 -- 1. 사용자 테이블 (Users)
 CREATE TABLE Users (
-    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    user_id VARCHAR(255) PRIMARY KEY, -- String 타입으로 변경
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     profile_picture_url LONGTEXT,
-    signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    subscription_id BIGINT
 );
+
+-- +. 외래 키 제약 조건 추가
+ALTER TABLE Users
+ADD CONSTRAINT fk_users_subscription
+FOREIGN KEY (subscription_id)
+REFERENCES Subscription(id)
+ON DELETE SET NULL;
+
+ALTER TABLE Subscription
+ADD CONSTRAINT fk_subscription_users
+FOREIGN KEY (user_id)
+REFERENCES Users(user_id)
+ON DELETE CASCADE;
 
 -- 2. 에피소드 테이블 (Episode)
 CREATE TABLE Episode (
@@ -38,7 +61,7 @@ CREATE TABLE Videos (
 
 -- 4. 시청기록 테이블 (Check_watched)
 CREATE TABLE Check_watched (
-    user_id INTEGER,
+    user_id VARCHAR(255),
     video_id INTEGER,
     watched_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     progress INTEGER NOT NULL,
@@ -49,7 +72,7 @@ CREATE TABLE Check_watched (
 
 -- 5. 좋아요 테이블 (Likes)
 CREATE TABLE Likes (
-    user_id INTEGER,
+    user_id VARCHAR(255),
     video_id INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, video_id),
@@ -57,17 +80,18 @@ CREATE TABLE Likes (
     FOREIGN KEY (video_id) REFERENCES Videos(video_id) ON DELETE CASCADE
 );
 
-INSERT INTO Users (username, email, password, profile_picture_url) VALUES
-('user1', 'user1@example.com', 'password123', 'https://example.com/profile1.jpg'),
-('user2', 'user2@example.com', 'password123', 'https://example.com/profile2.jpg'),
-('user3', 'user3@example.com', 'password123', 'https://example.com/profile3.jpg'),
-('user4', 'user4@example.com', 'password123', 'https://example.com/profile4.jpg'),
-('user5', 'user5@example.com', 'password123', 'https://example.com/profile5.jpg'),
-('user6', 'user6@example.com', 'password123', 'https://example.com/profile6.jpg'),
-('user7', 'user7@example.com', 'password123', 'https://example.com/profile7.jpg'),
-('user8', 'user8@example.com', 'password123', 'https://example.com/profile8.jpg'),
-('user9', 'user9@example.com', 'password123', 'https://example.com/profile9.jpg'),
-('user10', 'user10@example.com', 'password123', 'https://example.com/profile10.jpg');
+
+INSERT INTO Users (user_id, username, email, password, profile_picture_url) VALUES
+('1', 'user1', 'user1@example.com', 'password123', 'https://example.com/profile1.jpg'),
+('2', 'user2', 'user2@example.com', 'password123', 'https://example.com/profile2.jpg'),
+('3', 'user3', 'user3@example.com', 'password123', 'https://example.com/profile3.jpg'),
+('4', 'user4', 'user4@example.com', 'password123', 'https://example.com/profile4.jpg'),
+('5', 'user5', 'user5@example.com', 'password123', 'https://example.com/profile5.jpg'),
+('6', 'user6', 'user6@example.com', 'password123', 'https://example.com/profile6.jpg'),
+('7', 'user7', 'user7@example.com', 'password123', 'https://example.com/profile7.jpg'),
+('8', 'user8', 'user8@example.com', 'password123', 'https://example.com/profile8.jpg'),
+('9', 'user9', 'user9@example.com', 'password123', 'https://example.com/profile9.jpg'),
+('10', 'user10', 'user10@example.com', 'password123', 'https://example.com/profile10.jpg');
 
 INSERT INTO Episode (title, episode_count, description, released_date, thumbnail_url, cast_list) VALUES
 ('드라마 1', 10, 'Description for Episode 1', '2023-01-01', 'https://via.placeholder.com/280x400', 'Actor A, Actor B'),
@@ -104,37 +128,42 @@ INSERT INTO Videos (episode_id, video_url, duration, video_num, thumbnail_url) V
 (10, 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/1733016602387-video3.mp4', 1800, 2, 'https://via.placeholder.com/140x200');
 
 INSERT INTO Check_watched (user_id, video_id, progress) VALUES
-(1, 1, 50),
-(2, 2, 100),
-(3, 3, 75),
-(4, 4, 60),
-(5, 5, 90),
-(6, 6, 100),
-(7, 7, 30),
-(8, 8, 80),
-(9, 9, 95),
-(10, 10, 100),
-(1, 11, 70),
-(2, 12, 100),
-(3, 13, 45),
-(4, 14, 85),
-(5, 15, 100);
+('1', 1, 50),
+('2', 2, 100),
+('3', 3, 75),
+('4', 4, 60),
+('5', 5, 90),
+('6', 6, 100),
+('7', 7, 30),
+('8', 8, 80),
+('9', 9, 95),
+('10', 10, 100),
+('1', 11, 70),
+('2', 12, 100),
+('3', 13, 45),
+('4', 14, 85),
+('5', 15, 100);
 
 INSERT INTO Likes (user_id, video_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5),
-(6, 6),
-(7, 7),
-(8, 8),
-(9, 9),
-(10, 10),
-(1, 11),
-(2, 12),
-(3, 13),
-(4, 14),
-(5, 15);
+('1', 1),
+('2', 2),
+('3', 3),
+('4', 4),
+('5', 5),
+('6', 6),
+('7', 7),
+('8', 8),
+('9', 9),
+('10', 10),
+('1', 11),
+('2', 12),
+('3', 13),
+('4', 14),
+('5', 15);
+
+INSERT INTO Subscription (user_id, start_date, end_date, subscription_type) VALUES
+('1', '2023-12-01', '2024-01-01', 'PREMIUM'),
+('2', '2023-12-01', '2024-01-01', 'STANDARD'),
+('3', '2023-12-01', '2024-01-01', 'BASIC');
 
 

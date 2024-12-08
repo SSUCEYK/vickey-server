@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>결제하기</title>
+    <meta charset="utf-8" />
+    <!-- 토스페이먼츠 결제창 SDK 추가 -->
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+</head>
+
+<body>
+<script>
+    var clientKey = 'test_ck_5OWRapdA8djEk2dZqYAYVo1zEqZK'; // 여기에 실제 clientKey를 입력하세요.
+    var tossPayments = TossPayments(clientKey);
+    var uid = '[[${uid}]]';              // uid 바인딩
+    var subscriptionName = '[[${subscriptionName}]]';   // 구독 이름 바인딩
+    var subscriptionPrice = [[${subscriptionPrice}]];   // 구독 가격 바인딩 (숫자이므로 따옴표 없이)
+
+    function billing(method, requestJson) {
+      console.log(requestJson);
+      tossPayments.requestBillingAuth(method, requestJson)
+        .catch(function (error) {
+          if (error.code === "USER_CANCEL") {
+            alert('유저가 취소했습니다.');
+          } else {
+            alert(error.message);
+          }
+        });
+    }
+
+    var successUrl = window.location.origin + "/success?subscriptionTypeName=" + subscriptionName;
+    var failUrl = window.location.origin + "/fail";
+
+    var jsons = {
+        "card": {
+            "customerKey": uid,
+            "successUrl": successUrl,
+            "failUrl": failUrl
+        }
+    };
+
+    // 페이지 로드 후 바로 실행
+    window.onload = function() {
+      billing('카드', jsons.card); // 페이지 로드 후 카드 결제 창을 바로 띄움
+    };
+</script>
+</body>
+
+</html>

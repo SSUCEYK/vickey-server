@@ -11,9 +11,7 @@ import java.util.List;
 
 @Repository
 public interface CheckWatchedRepository extends JpaRepository<CheckWatched, CheckWatchedKey> {
-//    List<CheckWatched> findAllByUserId(Long userId);
-//    List<CheckWatched> findAllByUser_UserId(Long userId);
 
     @Query("SELECT cw FROM CheckWatched cw WHERE cw.user.userId = :userId")
-    List<CheckWatched> findAllByUserId(@Param("userId") Long userId);
+    List<CheckWatched> findAllByUserId(@Param("userId") String userId);
 }

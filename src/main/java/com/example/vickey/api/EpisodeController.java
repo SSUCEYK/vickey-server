@@ -79,4 +79,14 @@ public class EpisodeController {
         return ResponseEntity.ok(randomEpisodes);
     }
 
+    @GetMapping({"/search"})
+    public List<Episode> searchEpisodes(@RequestParam String searchQuery) {
+        return episodeService.searchEpisodes(searchQuery);
+    }
+
+    @GetMapping({"/contentInfo"})
+    public Episode contentInfoEpisodes(@RequestParam Integer contentInfoQuery) {
+        return episodeService.contentInfoEpisodes(contentInfoQuery);
+    }
 }
+

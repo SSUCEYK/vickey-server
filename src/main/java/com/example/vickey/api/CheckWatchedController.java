@@ -23,7 +23,7 @@ public class CheckWatchedController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<CheckWatchedResponse> getUserHistory(@PathVariable Long userId) {
+    public List<CheckWatchedResponse> getUserHistory(@PathVariable String userId) {
         return checkWatchedService.getUserHistory(userId);
     }
 

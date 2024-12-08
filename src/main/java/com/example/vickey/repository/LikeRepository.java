@@ -17,19 +17,19 @@ public interface LikeRepository extends JpaRepository<Like, LikeKey> {
 //    List<Like> findAllByUserId(Long userId);
 //    List<Like> findAllByUser_UserId(Long userId);
     @Query("SELECT l FROM Like l WHERE l.user.userId = :userId")
-    List<Like> findAllByUserId(@Param("userId") Long userId);
+    List<Like> findAllByUserId(@Param("userId") String userId);
 
     // 특정 사용자 ID와 에피소드 ID로 좋아요된 비디오 찾음
     @Query("SELECT l FROM Like l " +
             "WHERE l.user.userId = :userId " +
             "AND l.video.episode.episodeId = :episodeId")
-    List<Like> findAllByUserIdAndVideo_Episode_EpisodeId(Long userId, Long episodeId);
+    List<Like> findAllByUserIdAndVideo_Episode_EpisodeId(String userId, Long episodeId);
 
     @Query("SELECT new com.example.vickey.dto.LikedVideosResponse(v.id, v.thumbnailUrl, v.videoNum) " +
             "FROM Like l " +
             "JOIN l.video v " +
             "JOIN v.episode e " +
             "WHERE l.user.userId = :userId AND e.episodeId = :episodeId")
-    List<LikedVideosResponse> findLikedVideoInfoByUserIdAndEpisodeId(@Param("userId") Long userId, @Param("episodeId") Long episodeId);
+    List<LikedVideosResponse> findLikedVideoInfoByUserIdAndEpisodeId(@Param("userId") String userId, @Param("episodeId") Long episodeId);
 
 }

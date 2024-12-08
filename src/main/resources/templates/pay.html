@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 수단 선택</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            font-size: 2.5em;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-option:hover {
+            transform: scale(1.05);
+        }
+
+        .payment-option img {
+            height: 50px;
+        }
+
+        #kakaoPayOption img {
+            height: 40px;
+            width: auto;
+        }
+
+        .payment-option.selected {
+            border: 3px solid #E91E63;
+        }
+
+        .payment-text {
+            font-size: 1.2em;
+        }
+
+        .confirm-button {
+            margin-top: 40px;
+            padding: 15px;
+            background-color: #FF4081;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+            user-select: none;
+        }
+
+        .confirm-button:hover {
+            background-color: #f50057;
+        }
+
+        .confirm-button:focus {
+            outline: none;
+            caret-color: transparent;
+        }
+
+        .confirm-button:active {
+            outline: none;
+            background-color: #f50057;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>결제 수단 선택</h1>
+    <div class="payment-methods">
+        <div class="payment-option" id="cardOption" onclick="selectMethod('카드')">
+            <span class="payment-text">카드 결제</span>
+            <img src="https://img.icons8.com/ios/452/bank-cards.png" alt="카드 이미지">
+        </div>
+        <div class="payment-option" id="kakaoPayOption" onclick="selectMethod('카카오페이')">
+            <span class="payment-text">카카오페이</span>
+            <img src="https://developers.kakao.com/tool/resource/static/img/button/pay/payment_icon_yellow_small.png" alt="카카오페이 이미지">
+        </div>
+        <div class="payment-option" id="naverPayOption" onclick="selectMethod('네이버페이')">
+            <span class="payment-text">네이버페이</span>
+            <img src="https://developers.pay.naver.com/img/logo/symbol/symbol_sq_npaygr_large.svg" alt="네이버페이 이미지">
+        </div>
+    </div>
+    <button class="confirm-button" onclick="confirmPayment()">결제하기</button>
+</div>
+
+<script th:inline="javascript">
+    var selectedMethod = null;
+    var uid = /*[[${uid}]]*/;
+    var subscriptionType = /*[[${subscriptionType}]]*/;
+
+    function selectMethod(method) {
+        selectedMethod = method;
+
+        document.getElementById('cardOption').classList.remove('selected');
+        document.getElementById('kakaoPayOption').classList.remove('selected');
+        document.getElementById('naverPayOption').classList.remove('selected');
+
+        if (method === '카드') {
+            document.getElementById('cardOption').classList.add('selected');
+        } else if (method === '카카오페이') {
+            document.getElementById('kakaoPayOption').classList.add('selected');
+        } else if (method === '네이버페이') {
+            document.getElementById('naverPayOption').classList.add('selected');
+        }
+    }
+
+    function confirmPayment() {
+        if (!selectedMethod) {
+            alert('결제 수단을 선택해주세요.');
+            return;
+        }
+
+        var url = "";
+        if (selectedMethod === '카드') {
+            url = `/toss?uid=${uid}&subscriptionType=${subscriptionType}`;
+        } else if (selectedMethod === '카카오페이') {
+            url = `/ready?uid=${uid}&subscriptionType=${subscriptionType}`;
+        } else if (selectedMethod === '네이버페이') {
+            url = `/naver?uid=${uid}&subscriptionType=${subscriptionType}`;
+        }
+
+        window.location.href = url;
+    }
+</script>
+</body>
+</html>

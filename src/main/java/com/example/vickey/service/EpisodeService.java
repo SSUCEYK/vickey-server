@@ -84,4 +84,13 @@ public class EpisodeService {
     }
 
 
+
+    public List<Episode> searchEpisodes(String searchQuery) {
+        return episodeRepository.searchEpisodes(searchQuery);
+    }
+
+    public Episode contentInfoEpisodes(Integer contentInfoQuery) {
+        return episodeRepository.contentInfoEpisodes(contentInfoQuery);
+    }
+
 }
