@@ -30,6 +30,7 @@ public class LikeService {
         return likes.stream()
                 .map(like -> like.getVideo().getEpisode()) // Like에서 Episode 추출
                 .collect(Collectors.toList());
+
     }
 
     public List<Like> getUserLikes(String userId) {

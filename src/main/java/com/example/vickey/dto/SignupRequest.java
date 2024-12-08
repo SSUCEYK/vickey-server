@@ -2,12 +2,22 @@ package com.example.vickey.dto;
 
 public class SignupRequest {
 
+    private String uid;
     private String email;
     private String password;
 
-    public SignupRequest(String email, String password) {
+    public SignupRequest(String uid, String email, String password) {
+        this.uid = uid;
         this.email = email;
         this.password = password;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getEmail() {

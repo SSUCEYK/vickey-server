@@ -75,6 +75,7 @@ public class EpisodeController {
 
     @GetMapping("/randomEpisodes")
     public ResponseEntity<List<Episode>> getRandomEpisodes(@RequestParam int n) {
+        System.out.println("EpisodeController.getRandomEpisodes: n=" + n);
         List<Episode> randomEpisodes = episodeService.getRandomEpisodes(n);
         return ResponseEntity.ok(randomEpisodes);
     }
