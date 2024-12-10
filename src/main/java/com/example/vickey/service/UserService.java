@@ -79,4 +79,17 @@ public class UserService {
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    public void updateUsername(String userId, String newUsername) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setUsername(newUsername);
+        userRepository.save(user);
+    }
+
+    public void updateProfileImage(String userId, String base64Image) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setProfilePictureUrl(base64Image);
+        userRepository.save(user);
+    }
 }
+

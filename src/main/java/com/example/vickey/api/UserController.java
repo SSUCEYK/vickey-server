@@ -104,6 +104,7 @@ public class UserController {
             response.put("userId", user.getUserId());
             response.put("username", user.getUsername());
             response.put("email", user.getEmail());
+            response.put("isSubscribed", user.getSubscription() != null); //api 중복 호출되지 않도록 로그인 시 같이 정보 반환함
 
             return ResponseEntity.ok(response);
 //            }
@@ -119,6 +120,10 @@ public class UserController {
             response.put("username", newUser.getUsername());
             response.put("email", newUser.getEmail());
             response.put("message", "User created and logged in");
+
+            // 가입 시에 자동으로 subscription 추가하게 되어있기 때문에 바로 False 반환하기
+            // boolean isSubscribed = user.getSubscription() != null;
+            response.put("isSubscribed", false);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
@@ -146,4 +151,18 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @PutMapping("/{userId}/username")
+    public ResponseEntity<Void> updateUsername(@PathVariable String userId, @RequestBody String newUsername) {
+        userService.updateUsername(userId, newUsername);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{userId}/profile-image")
+    public ResponseEntity<Void> updateProfileImage(@PathVariable String userId, @RequestBody String base64Image) {
+        userService.updateProfileImage(userId, base64Image);
+        return ResponseEntity.ok().build();
+    }
+
 }

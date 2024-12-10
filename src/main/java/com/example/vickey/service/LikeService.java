@@ -27,10 +27,15 @@ public class LikeService {
     public List<Episode> getLikedEpisodes(String userId) {
         List<Like> likes = likeRepository.findAllByUserId(userId);
 
+        // 좋아요가 없으면 빈 리스트 반환
+        if (likes.isEmpty()) {
+            return List.of(); // 빈 리스트 반환
+        }
+
+        // Like에서 Episode 리스트 생성
         return likes.stream()
                 .map(like -> like.getVideo().getEpisode()) // Like에서 Episode 추출
                 .collect(Collectors.toList());
-
     }
 
     public List<Like> getUserLikes(String userId) {

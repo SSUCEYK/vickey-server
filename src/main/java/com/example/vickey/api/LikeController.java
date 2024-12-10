@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/likes")
@@ -25,8 +26,16 @@ public class LikeController {
     }
 
     @GetMapping("/user/{userId}/episodes")
-    public List<Episode> getLikedEpisodes(@PathVariable String userId) {
-        return likeService.getLikedEpisodes(userId);
+    public ResponseEntity<List<Episode>> getLikedEpisodes(@PathVariable String userId) {
+        List<Episode> likedEpisodes = likeService.getLikedEpisodes(userId);
+
+        if (likedEpisodes.isEmpty()) {
+            // likedEpisodes가 없는 경우 204 No Content 반환
+            return ResponseEntity.noContent().build();
+        }
+
+        // likedEpisodes가 있는 경우 200 OK와 데이터 반환
+        return ResponseEntity.ok(likedEpisodes);
     }
 
     @GetMapping("/user/{userId}/episodes/{episodeId}")
@@ -39,15 +48,5 @@ public class LikeController {
     public List<Like> getUserLikes(@PathVariable String userId) {
         return likeService.getUserLikes(userId);
     }
-
-    //    @GetMapping("/user/{userId}/episodes/{episodeId}")
-//    public List<String> getLikedVideosByEpisode(@PathVariable Long userId, @PathVariable Long episodeId) {
-//        List<Like> likes = likeRepository.findAllByUserIdAndVideo_Episode_EpisodeId(userId, episodeId);
-//
-//        // 비디오 썸네일 URL 리스트 반환
-//        return likes.stream()
-//                .map(like -> like.getVideo().getThumbnailUrl())
-//                .collect(Collectors.toList());
-//    }
 
 }
