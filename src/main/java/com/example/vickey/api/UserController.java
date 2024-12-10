@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -160,9 +161,12 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/profile-image")
-    public ResponseEntity<Void> updateProfileImage(@PathVariable String userId, @RequestBody String base64Image) {
-        userService.updateProfileImage(userId, base64Image);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateProfileImage(@PathVariable String userId, @RequestParam("file") MultipartFile file) {
+        try {
+            return ResponseEntity.ok(userService.updateProfileImage(userId, file));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

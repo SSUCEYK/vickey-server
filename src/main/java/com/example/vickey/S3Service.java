@@ -9,14 +9,12 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -42,10 +40,10 @@ public class S3Service {
     }
 
     // 썸네일 사진 파일 업로드
-    public String uploadThumbnail(MultipartFile file) throws IOException {
+    public String uploadImg(MultipartFile file, String imgType) throws IOException {
         try {
             // 파일 이름 생성
-            String fileName = "thumbnails/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+            String fileName = imgType + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
             // S3에 파일 업로드
             s3Client.putObject(

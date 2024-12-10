@@ -4,14 +4,12 @@ import com.example.vickey.S3Service;
 import com.example.vickey.entity.Episode;
 import com.example.vickey.repository.EpisodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,7 +46,7 @@ public class EpisodeService {
 
     public String uploadThumbnail(MultipartFile file) {
         try {
-            String url = s3Service.uploadThumbnail(file);
+            String url = s3Service.uploadImg(file, "thumbnail");
             System.out.println("Uploaded Thumbnail URL: " + url);
             return url;
         } catch (IOException e) {

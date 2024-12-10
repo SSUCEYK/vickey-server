@@ -103,7 +103,7 @@ INSERT INTO Episode (title, episode_count, description, released_date, thumbnail
 ('드라마 7', 9, 'Description for Episode 7', '2023-07-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_.seonjaejpg.jpg', 'Actor M, Actor N'),
 ('드라마 8', 11, 'Description for Episode 8', '2023-08-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EB%B9%84%EB%B0%80%EC%9D%98%EC%88%B2.jpg', 'Actor O, Actor P'),
 ('드라마 9', 7, 'Description for Episode 9', '2023-09-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EC%82%AC%EB%9E%91%EC%9D%98%EB%B6%88%EC%8B%9C%EC%B0%A9.jpg', 'Actor Q, Actor R'),
-('드라마 10', 13, 'Description for Episode 10', '2023-10-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EC%9C%A0%EB%AF%B8%EC%9D%98%EC%84%B8%ED%8F%AC%EB%93%A4.jpg', 'Actor S, Actor T');
+('드라마 10', 13, 'Description for Episode 10', '2023-10-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/yum_cell.jpg', 'Actor S, Actor T');
 
 --INSERT INTO episode (episode_id, episode_count, title, cast_list, released_date, description, thumbnail_url, video_urls)
 --VALUES (7333, 5, 'The Last Stand', 'William Taylor, Emily White', '2023', 'Everything comes to a dramatic conclusion.', 'https://picsum.photos/900/1850',

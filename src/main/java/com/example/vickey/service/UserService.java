@@ -1,5 +1,6 @@
 package com.example.vickey.service;
 
+import com.example.vickey.S3Service;
 import com.example.vickey.entity.Subscription;
 import com.example.vickey.entity.User;
 import com.example.vickey.repository.SubscriptionRepository;
@@ -8,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +23,13 @@ public class UserService {
     private final UserRepository userRepository;
 //    private final PasswordEncoder passwordEncoder;
     private final SubscriptionRepository subscriptionRepository;
+    private final S3Service s3Service;
 
     @Autowired
-    public UserService(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
+    public UserService(UserRepository userRepository, SubscriptionRepository subscriptionRepository, S3Service s3Service) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.s3Service = s3Service;
     }
 
     @Transactional
@@ -86,10 +94,25 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateProfileImage(String userId, String base64Image) {
+    public String updateProfileImage(String userId, MultipartFile imageFile) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setProfilePictureUrl(base64Image);
-        userRepository.save(user);
+        try {
+            String url = s3Service.uploadImg(imageFile, "profile");
+            System.out.println("Uploaded ProfileImage URL: " + url);
+            user.setProfilePictureUrl(url);
+            userRepository.save(user);
+            return url;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload thumbnail to S3: " + e.getMessage(), e);
+        }
+    }
+
+    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
     }
 }
 
