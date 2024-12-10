@@ -1,6 +1,7 @@
 package com.example.vickey.entity;
 
 import com.example.vickey.repository.EpisodeRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,13 +15,14 @@ public class Video {
 
     @ManyToOne
     @JoinColumn(name = "episode_id", nullable = false) //외래키 설정
+    @JsonBackReference // 부모 엔티티를 직렬화에서 제외
     private Episode episode;
 
     @Column(name = "video_url", nullable = false)
     private String videoUrl;
 
     @Column(nullable = false)
-    private long duration;
+    private int duration;
 
     @Column(name = "video_num", nullable = false)
     private int videoNum;
@@ -82,11 +84,11 @@ public class Video {
     }
 
 
-    public long getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 

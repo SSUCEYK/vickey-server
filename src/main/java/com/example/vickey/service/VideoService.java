@@ -34,7 +34,7 @@ public class VideoService {
 
     // 비디오 정보를 DB에 저장
     @Transactional
-    public void saveVideo(Long episodeId, String videoUrl, long duration) {
+    public void saveVideo(Long episodeId, String videoUrl, int duration) {
 
         // 1. 해당 에피소드 ID로 Episode 가져오기
 //        Episode episode = episodeRepository.findById(episodeId)

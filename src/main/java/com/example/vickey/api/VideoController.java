@@ -33,7 +33,7 @@ public class VideoController {
             //1. S3에 업로드
             Map<String, Object> result = videoService.uploadVideo(file);
             String videoUrl = (String) result.get("url");
-            long duration = (Long) result.get("duration");
+            int duration = (int) result.get("duration");
 
             // 2. DB에 저장
             System.out.println("Calling saveVideo...");

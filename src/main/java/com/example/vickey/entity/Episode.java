@@ -1,9 +1,12 @@
 package com.example.vickey.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 // 컨텐츠 (==episode; 처음 설계 시 이름을 헷갈리게 지정했으니 주의)
 @Entity
@@ -32,16 +35,35 @@ public class Episode {
     @Column(name = "cast_list")
     private String castList;
 
-    @Column(name = "video_urls", columnDefinition = "json")
-    private String videoURLs; //json 문자열 형식의 모든 영상 주소
+    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // 자식 엔티티를 직렬화
+    private List<Video> videos = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "episode", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Video> videos = new ArrayList<>();
+    @Transient
+    private List<String> videoUrls; // Transient 필드로 videoUrls 추가 (DB 매핑X, JPA 관리 엔티티 필드에 포함X, videos 리스트에서 videoUrl 필드를 추출해 동적으로 제공)
 
 
+    // Getters 및 Setters
+    public List<String> getVideoUrls() {
+        if (this.videoUrls == null) {
+            this.videoUrls = this.videos.stream()
+                    .map(Video::getVideoUrl)
+                    .collect(Collectors.toList());
+        }
+        return videoUrls;
+    }
 
+    public void setEpisodeCount(Integer episodeCount) {
+        this.episodeCount = episodeCount;
+    }
 
-// Getters 및 Setters
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
+    }
 
     public Long getEpisodeId() {
         return episodeId;
@@ -97,16 +119,5 @@ public class Episode {
 
     public void setCastList(String castList) {
         this.castList = castList;
-    }
-
-    public void setEpisodeCount(Integer episodeCount) {
-        this.episodeCount = episodeCount;
-    }
-    public String getVideoURLs() {
-        return videoURLs;
-    }
-
-    public void setVideoURLs(String videoURLs) {
-        this.videoURLs = videoURLs;
     }
 }

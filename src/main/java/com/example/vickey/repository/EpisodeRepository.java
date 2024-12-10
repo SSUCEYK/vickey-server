@@ -29,5 +29,9 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
 
     @Query("SELECT e FROM Episode e WHERE e.episodeId = :contentInfoQuery")
     Episode contentInfoEpisodes(@Param("contentInfoQuery") Long var1);
+
+    @Query("SELECT e FROM Episode e JOIN FETCH e.videos WHERE e.episodeId = :contentInfoQuery")
+    Episode findEpisodeWithVideos(@Param("contentInfoQuery")Long contentInfoQuery);
+
     // 추가적인 쿼리 메서드
 }
