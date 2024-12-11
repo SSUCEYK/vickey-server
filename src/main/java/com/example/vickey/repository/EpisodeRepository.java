@@ -12,9 +12,6 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
 
     List<Episode> findAll();
 
-//    @Query("SELECT new com.example.vickey.EpisodeTitleCountDto(e.title, e.episodeCount) FROM Episode e")
-//    List<EpisodeTitleCountDto> findTitleAndEpisodeCount();
-
     @Query("SELECT e.thumbnailUrl FROM Episode e")
     List<String> findAllThumbnailUrls();
 
@@ -33,5 +30,14 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query("SELECT e FROM Episode e JOIN FETCH e.videos WHERE e.episodeId = :contentInfoQuery")
     Episode findEpisodeWithVideos(@Param("contentInfoQuery")Long contentInfoQuery);
 
+    // 좋아요 수 기준 상위 n개의 에피소드
+    @Query("SELECT e FROM Episode e ORDER BY e.likeCount DESC")
+    List<Episode> findTopNEpisodesByLikeCount(@Param("n") int n);
+
+    // 조회수 기준 상위 n개의 에피소드
+    @Query("SELECT e FROM Episode e ORDER BY e.watchCount DESC")
+    List<Episode> findTopNEpisodesByWatchCount(@Param("n") int n);
+
     // 추가적인 쿼리 메서드
+
 }

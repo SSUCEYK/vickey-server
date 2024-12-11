@@ -45,7 +45,9 @@ CREATE TABLE Episode (
     description TEXT,
     released_date VARCHAR(255),
     thumbnail_url LONGTEXT,
-    cast_list VARCHAR(255) -- cast가 예약어라 변경
+    cast_list VARCHAR(255), -- cast가 예약어라 변경
+    like_count INTEGER,
+    watch_count INTEGER
 );
 
 -- 3. 비디오 테이블 (Videos)
@@ -93,17 +95,17 @@ INSERT INTO Users (user_id, username, email, password, profile_picture_url) VALU
 ('9', 'user9', 'user9@example.com', 'password123', 'https://via.placeholder.com/100x100'),
 ('10', 'user10', 'user10@example.com', 'password123', 'https://via.placeholder.com/100x100');
 
-INSERT INTO Episode (title, episode_count, description, released_date, thumbnail_url, cast_list) VALUES
-('드라마 1', 10, 'Description for Episode 1', '2023-01-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_goblin.jpg', 'Actor A, Actor B'),
-('드라마 2', 12, 'Description for Episode 2', '2023-02-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_lovefromstar.jpg', 'Actor C, Actor D'),
-('드라마 3', 8, 'Description for Episode 3', '2023-03-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_ohmyghost.jpg', 'Actor E, Actor F'),
-('드라마 4', 15, 'Description for Episode 4', '2023-04-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_ourbelovedsummer.jpg', 'Actor G, Actor H'),
-('드라마 5', 10, 'Description for Episode 5', '2023-05-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_signal.jpg', 'Actor I, Actor J'),
-('드라마 6', 12, 'Description for Episode 6', '2023-06-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_vincenzo.jpg', 'Actor K, Actor L'),
-('드라마 7', 9, 'Description for Episode 7', '2023-07-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_.seonjaejpg.jpg', 'Actor M, Actor N'),
-('드라마 8', 11, 'Description for Episode 8', '2023-08-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EB%B9%84%EB%B0%80%EC%9D%98%EC%88%B2.jpg', 'Actor O, Actor P'),
-('드라마 9', 7, 'Description for Episode 9', '2023-09-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EC%82%AC%EB%9E%91%EC%9D%98%EB%B6%88%EC%8B%9C%EC%B0%A9.jpg', 'Actor Q, Actor R'),
-('드라마 10', 13, 'Description for Episode 10', '2023-10-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/yum_cell.jpg', 'Actor S, Actor T');
+INSERT INTO Episode (title, episode_count, description, released_date, thumbnail_url, cast_list, like_count, watch_count) VALUES
+('드라마 1', 10, 'Description for Episode 1', '2023-01-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_goblin.jpg', 'Actor A, Actor B', 0, 0),
+('드라마 2', 12, 'Description for Episode 2', '2023-02-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_lovefromstar.jpg', 'Actor C, Actor D', 0, 0),
+('드라마 3', 8, 'Description for Episode 3', '2023-03-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_ohmyghost.jpg', 'Actor E, Actor F', 0, 0),
+('드라마 4', 15, 'Description for Episode 4', '2023-04-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_ourbelovedsummer.jpg', 'Actor G, Actor H', 0, 0),
+('드라마 5', 10, 'Description for Episode 5', '2023-05-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_signal.jpg', 'Actor I, Actor J', 0, 0),
+('드라마 6', 12, 'Description for Episode 6', '2023-06-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_vincenzo.jpg', 'Actor K, Actor L', 0, 0),
+('드라마 7', 9, 'Description for Episode 7', '2023-07-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_.seonjaejpg.jpg', 'Actor M, Actor N', 0, 0),
+('드라마 8', 11, 'Description for Episode 8', '2023-08-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EB%B9%84%EB%B0%80%EC%9D%98%EC%88%B2.jpg', 'Actor O, Actor P', 0, 0),
+('드라마 9', 7, 'Description for Episode 9', '2023-09-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/thumbnail_%EC%82%AC%EB%9E%91%EC%9D%98%EB%B6%88%EC%8B%9C%EC%B0%A9.jpg', 'Actor Q, Actor R', 0, 0),
+('드라마 10', 13, 'Description for Episode 10', '2023-10-01', 'https://ceyk-bucket.s3.ap-northeast-2.amazonaws.com/yum_cell.jpg', 'Actor S, Actor T', 0, 0);
 
 --INSERT INTO episode (episode_id, episode_count, title, cast_list, released_date, description, thumbnail_url, video_urls)
 --VALUES (7333, 5, 'The Last Stand', 'William Taylor, Emily White', '2023', 'Everything comes to a dramatic conclusion.', 'https://picsum.photos/900/1850',

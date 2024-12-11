@@ -26,17 +26,9 @@ public class EpisodeService {
         this.s3Service = s3Service;
     }
 
-//    public List<EpisodeTitleCountDto> getEpisodeTitlesAndCounts() {
-//        return episodeRepository.findTitleAndEpisodeCount();
-//    }
-
     public List<Episode> getAllEpisodes() {
         return episodeRepository.findAll();
     }
-
-//    public List<String> getEpisodeThumbnails() {
-//        return episodeRepository.findAllThumbnailUrls();
-//    }
 
     public Episode addEpisode(Episode episode) {
         System.out.println("EpisodeService/ Received Episode in addEpisode: " + episode);
@@ -53,7 +45,6 @@ public class EpisodeService {
             throw new RuntimeException("Failed to upload thumbnail to S3: " + e.getMessage(), e);
         }
     }
-
 
     public Optional<Episode> getEpisodeById(Long id) {
         return episodeRepository.findById(id);
@@ -81,7 +72,13 @@ public class EpisodeService {
         return episodeRepository.findRandomEpisodes(n);
     }
 
+    public List<Episode> getTopNEpisodesByLikedCount(int n) {
+        return episodeRepository.findTopNEpisodesByLikeCount(n);
+    }
 
+    public List<Episode> getTopNEpisodesByWatchedCount(int n) {
+        return episodeRepository.findTopNEpisodesByWatchCount(n);
+    }
 
     public List<Episode> searchEpisodes(String searchQuery) {
         return episodeRepository.searchEpisodes(searchQuery);

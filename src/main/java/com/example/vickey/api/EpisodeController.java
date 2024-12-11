@@ -73,11 +73,25 @@ public class EpisodeController {
         return episodeService.getRandomEpisodeIds(n);
     }
 
+
+    // randomEpisodes?n=4 -> 랜덤 에피소드 4개 리턴한다는 뜻
     @GetMapping("/randomEpisodes")
     public ResponseEntity<List<Episode>> getRandomEpisodes(@RequestParam int n) {
         System.out.println("EpisodeController.getRandomEpisodes: n=" + n);
         List<Episode> randomEpisodes = episodeService.getRandomEpisodes(n);
         return ResponseEntity.ok(randomEpisodes);
+    }
+
+    // chooseEpisode?n=4 -> 좋아요 가장 많은 4개 에피소드 리턴한다는 뜻
+    @GetMapping("/topLikedEpisodes")
+    public ResponseEntity<List<Episode>> getTopNLikedEpisode(@RequestParam("n") int n) {
+        return  ResponseEntity.ok(episodeService.getTopNEpisodesByLikedCount(n));
+    }
+
+    // /watchEpisode?n=4 -> 조회수 가장 많은 4개 에피소드 id 리턴한다는 뜻
+    @GetMapping("/topWatchedEpisodes")
+    public ResponseEntity<List<Episode>> getTopNWatchedEpisode(@RequestParam("n") int n) {
+        return ResponseEntity.ok(episodeService.getTopNEpisodesByWatchedCount(n));
     }
 
     @GetMapping({"/search"})

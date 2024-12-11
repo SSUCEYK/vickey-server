@@ -42,8 +42,34 @@ public class Episode {
     @Transient
     private List<String> videoUrls; // Transient 필드로 videoUrls 추가 (DB 매핑X, JPA 관리 엔티티 필드에 포함X, videos 리스트에서 videoUrl 필드를 추출해 동적으로 제공)
 
+    @Column(name = "like_count", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+    private int likeCount;
+
+    @Column(name = "watch_count", nullable = false, columnDefinition = "INTEGER DEFAULT 0")
+    private int watchCount;
+
 
     // Getters 및 Setters
+    public void setVideoUrls(List<String> videoUrls) {
+        this.videoUrls = videoUrls;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public int getWatchCount() {
+        return watchCount;
+    }
+
+    public void setWatchCount(int watchCount) {
+        this.watchCount = watchCount;
+    }
+
     public List<String> getVideoUrls() {
         if (this.videoUrls == null) {
             this.videoUrls = this.videos.stream()
