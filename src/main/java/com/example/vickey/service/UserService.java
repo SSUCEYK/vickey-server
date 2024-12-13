@@ -115,12 +115,14 @@ public class UserService {
 
     public String updateProfileImage(String userId, MultipartFile imageFile) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
         try {
             String url = s3Service.uploadImg(imageFile, "profile");
             System.out.println("Uploaded ProfileImage URL: " + url);
             user.setProfilePictureUrl(url);
             userRepository.save(user);
             return url;
+
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload thumbnail to S3: " + e.getMessage(), e);
         }

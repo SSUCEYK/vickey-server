@@ -112,11 +112,14 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/profile-image")
-    public ResponseEntity<String> updateProfileImage(@PathVariable String userId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, String>> updateProfileImage(@PathVariable String userId, @RequestParam("file") MultipartFile file) {
         try {
-            return ResponseEntity.ok(userService.updateProfileImage(userId, file));
+            String url = userService.updateProfileImage(userId, file);
+            Map<String, String> response = new HashMap<>();
+            response.put("profileImageUrl", url);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
