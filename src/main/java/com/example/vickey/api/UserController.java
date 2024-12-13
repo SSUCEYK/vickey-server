@@ -2,8 +2,11 @@ package com.example.vickey.api;
 
 import com.example.vickey.dto.LoginRequest;
 import com.example.vickey.dto.SignupRequest;
+import com.example.vickey.dto.UserResponse;
 import com.example.vickey.entity.Episode;
+import com.example.vickey.entity.Subscription;
 import com.example.vickey.entity.User;
+import com.example.vickey.repository.SubscriptionRepository;
 import com.example.vickey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,67 +70,16 @@ public class UserController {
     }
 
 
-    // 카카오, 네이버 로그인 처리
-    @PostMapping("/social-login")
-    public ResponseEntity<Map<String, Object>> socialLogin(
-            @RequestParam String email,
-            @RequestParam(required = false) String profilePictureUrl) {
-
-        String uid = ""; // 수정
-        User user = userService.findOrCreateUser(uid, email, profilePictureUrl);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("userId", user.getUserId());
-        response.put("username", user.getUsername());
-        response.put("email", user.getEmail());
-        response.put("profilePictureUrl", user.getProfilePictureUrl());
-
-        return ResponseEntity.ok(response);
-    }
-
     // 이메일 로그인 처리
     @PostMapping("/email-login")
-    public ResponseEntity<Map<String, Object>> emailLogin(@RequestBody LoginRequest loginRequest) {
-        String uid = loginRequest.getUid();
+    public ResponseEntity<UserResponse> emailLogin(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
+        String name = email.substring(0, email.indexOf("@"));
+        User user = userService.findOrCreateUser(loginRequest.getUid(), email, "", name);
 
-        System.out.println("emailLogin: email="+email);
-        System.out.println("emailLogin: password="+password);
+        boolean isSubscribed = user.getSubscription() != null;
 
-        // 1. User 조회
-        User user = userService.findUserByEmail(email);
-
-        if (user != null) {
-            // 2-1. User 존재 시 PW 체크
-//            if (userService.validatePassword(password, user.getPassword())) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("userId", user.getUserId());
-            response.put("username", user.getUsername());
-            response.put("email", user.getEmail());
-            response.put("isSubscribed", user.getSubscription() != null); //api 중복 호출되지 않도록 로그인 시 같이 정보 반환함
-
-            return ResponseEntity.ok(response);
-//            }
-//            else{
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password"));
-//            }
-        }
-        else{
-            // 2-2. User 부재 시 생성
-            User newUser = userService.createEmailUser(uid, email, "");
-            Map<String, Object> response = new HashMap<>();
-            response.put("userId", newUser.getUserId());
-            response.put("username", newUser.getUsername());
-            response.put("email", newUser.getEmail());
-            response.put("message", "User created and logged in");
-
-            // 가입 시에 자동으로 subscription 추가하게 되어있기 때문에 바로 False 반환하기
-            // boolean isSubscribed = user.getSubscription() != null;
-            response.put("isSubscribed", false);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        }
+        return ResponseEntity.ok(new UserResponse(user.getUserId(), user.getUsername(), user.getEmail(), user.getProfilePictureUrl(), isSubscribed));
     }
 
     // 이메일 가입 처리
@@ -135,7 +87,6 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> emailSignup(@RequestBody SignupRequest signupRequest) {
         String uid = signupRequest.getUid();
         String email = signupRequest.getEmail();
-        String password = signupRequest.getPassword();
 
         User newUser = userService.createEmailUser(uid, email, "");
 

@@ -16,10 +16,10 @@ public class User {
     @Column(nullable = false)
     private String username = "게스트"; //default
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column(name = "profile_picture_url", columnDefinition = "LONGTEXT")
@@ -33,10 +33,18 @@ public class User {
     private Subscription subscription;
 
 
+
     public void updateSubscribe(Subscription subscription) {
         this.subscription = subscription;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        if (this.userId == null || this.userId.isEmpty()) {
+            this.userId = java.util.UUID.randomUUID().toString(); // 기본적으로 UUID 설정
+        }
+        this.signupDate = LocalDateTime.now();
+    }
 
     // Getters and setters
     public Subscription getSubscription() {
@@ -45,11 +53,6 @@ public class User {
 
     public void setSubscription(Subscription subscription) {
         this.subscription = subscription;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.signupDate = LocalDateTime.now();
     }
 
     public String getUserId() {

@@ -15,7 +15,7 @@ CREATE TABLE Subscription (
 
 -- 1. 사용자 테이블 (Users)
 CREATE TABLE Users (
-    user_id VARCHAR(255) PRIMARY KEY, -- String 타입으로 변경
+    user_id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
