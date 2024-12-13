@@ -76,7 +76,7 @@ CREATE TABLE Check_watched (
 CREATE TABLE Likes (
     user_id VARCHAR(255),
     video_id BIGINT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP,
     PRIMARY KEY (user_id, video_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (video_id) REFERENCES Videos(video_id) ON DELETE CASCADE

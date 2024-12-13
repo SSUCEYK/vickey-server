@@ -8,7 +8,7 @@ import java.util.Objects;
 @Embeddable
 public class CheckWatchedKey implements Serializable {
 
-    private Long userId;
+    private String userId;
     private Long videoId;
 
     // equals() and hashCode()

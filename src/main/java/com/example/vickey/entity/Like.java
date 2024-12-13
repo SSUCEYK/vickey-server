@@ -2,6 +2,7 @@ package com.example.vickey.entity;
 
 import com.example.vickey.LikeKey;
 import jakarta.persistence.*;
+import com.example.vickey.entity.User;
 
 import java.security.Timestamp;
 import java.time.LocalDateTime;
@@ -25,7 +26,6 @@ public class Like {
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
-
 
 
     @PrePersist

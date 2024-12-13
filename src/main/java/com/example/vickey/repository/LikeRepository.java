@@ -14,8 +14,6 @@ import java.util.List;
 public interface LikeRepository extends JpaRepository<Like, LikeKey> {
 
     // 사용자 ID로 좋아요를 찾음
-//    List<Like> findAllByUserId(Long userId);
-//    List<Like> findAllByUser_UserId(Long userId);
     @Query("SELECT l FROM Like l WHERE l.user.userId = :userId")
     List<Like> findAllByUserId(@Param("userId") String userId);
 
@@ -25,7 +23,7 @@ public interface LikeRepository extends JpaRepository<Like, LikeKey> {
             "AND l.video.episode.episodeId = :episodeId")
     List<Like> findAllByUserIdAndVideo_Episode_EpisodeId(String userId, Long episodeId);
 
-    @Query("SELECT new com.example.vickey.dto.LikedVideosResponse(v.id, v.thumbnailUrl, v.videoNum) " +
+    @Query("SELECT new com.example.vickey.dto.LikedVideosResponse(v.videoId, v.thumbnailUrl, v.videoNum) " +
             "FROM Like l " +
             "JOIN l.video v " +
             "JOIN v.episode e " +
