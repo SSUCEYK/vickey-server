@@ -16,6 +16,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                 auth.requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("*").permitAll()
                         .anyRequest().permitAll()); // 모든 요청 허용
         return http.build();
     }

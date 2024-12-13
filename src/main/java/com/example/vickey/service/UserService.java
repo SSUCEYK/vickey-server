@@ -56,13 +56,9 @@ public class UserService {
             User newUser = new User();
             newUser.setUserId(uid);
             newUser.setEmail(email);
-            newUser.setPassword(""); // 저장X
+            newUser.setUsername(name);
             newUser.setProfilePictureUrl(profilePictureUrl);
-
-            if (!Objects.equals(name, "")){
-                //name 입력 들어올 때만 설정 (아니면 default값으로 설정)
-                newUser.setUsername(name);
-            }
+            newUser.setPassword(""); // 저장X
 
             return userRepository.save(newUser);
         }

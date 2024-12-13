@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOriginPatterns("*") // 모든 출처 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .allowedOrigins("*")
                 .allowedOriginPatterns("/h2-console/**")
                 .allowedOriginPatterns("/api/**")
                 .allowCredentials(false); // 필요한 경우 추가

@@ -16,11 +16,11 @@ CREATE TABLE Subscription (
 -- 1. 사용자 테이블 (Users)
 CREATE TABLE Users (
     user_id VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    username VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
     profile_picture_url LONGTEXT,
-    signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    signup_date TIMESTAMP,
     subscription_id BIGINT
 );
 
