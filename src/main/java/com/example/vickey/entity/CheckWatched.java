@@ -26,15 +26,16 @@ public class CheckWatched {
     private Video video;
 
     @Column(nullable = false)
-    private Integer progress;
+    private Integer progress = 0; //default값 설정
 
     @Column(name = "watched_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime watchedDate;
-
-
+    
     @PrePersist
     protected void onCreate() {
-        this.watchedDate = LocalDateTime.now();
+        if (this.watchedDate == null) {
+            this.watchedDate = LocalDateTime.now();
+        }
     }
 
     // Getters and setters

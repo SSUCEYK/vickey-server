@@ -21,6 +21,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class KakaoController {
+
+    private final String baseUrl = "http://3.37.105.22:8080";
+
     private final SubscriptionService subscriptionService;
     @Value("${kakao.secretKey}")
     private String secretKey;
@@ -42,9 +45,9 @@ public class KakaoController {
         requestBody.put("total_amount", subscriptionType.getPrice());
         requestBody.put("vat_amount", "0");
         requestBody.put("tax_free_amount", "0");
-        requestBody.put("approval_url", "http://192.168.219.103:8080/kakao/success");
-        requestBody.put("fail_url", "http://192.168.219.103:8080/fail");
-        requestBody.put("cancel_url", "http://192.168.219.103:8080/cancel");
+        requestBody.put("approval_url", baseUrl+"/kakao/success");
+        requestBody.put("fail_url", baseUrl+"/fail");
+        requestBody.put("cancel_url", baseUrl+"/cancel");
         HttpEntity<Map<String, Object>> entity = new HttpEntity(requestBody, headers);
 
         try {

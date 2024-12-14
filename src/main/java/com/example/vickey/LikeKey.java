@@ -12,6 +12,22 @@ public class LikeKey implements Serializable {
     private String userId;
     private Long videoId;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
+    }
+
     // equals() and hashCode()
     @Override
     public boolean equals(Object o) {

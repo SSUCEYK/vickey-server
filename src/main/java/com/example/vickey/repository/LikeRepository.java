@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Like, LikeKey> {
@@ -29,5 +30,8 @@ public interface LikeRepository extends JpaRepository<Like, LikeKey> {
             "JOIN v.episode e " +
             "WHERE l.user.userId = :userId AND e.episodeId = :episodeId")
     List<LikedVideosResponse> findLikedVideoInfoByUserIdAndEpisodeId(@Param("userId") String userId, @Param("episodeId") Long episodeId);
+
+    @Query("SELECT l FROM Like l WHERE l.user.userId = :userId AND l.video.videoId = :videoId")
+    Optional<Like> findByUserIdAndVideoId(@Param("userId") String userId, @Param("videoId") Long videoId);
 
 }

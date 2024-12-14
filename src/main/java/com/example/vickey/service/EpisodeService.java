@@ -84,8 +84,7 @@ public class EpisodeService {
         return episodeRepository.searchEpisodes(searchQuery);
     }
 
-    public Episode contentInfoEpisodes(long contentInfoQuery) {
-//        Episode episode = episodeRepository.contentInfoEpisodes(contentInfoQuery);
+    public Episode contentInfoEpisode(long contentInfoQuery) {
         Episode episode = episodeRepository.findEpisodeWithVideos(contentInfoQuery); //Lazy Loading 대신 Fetch Join 사용
         System.out.println("contentInfoEpisodes: Video="+episode.getVideos());
         System.out.println("contentInfoEpisodes: VideoURLs=" + episode.getVideoUrls());

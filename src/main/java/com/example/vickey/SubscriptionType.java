@@ -2,9 +2,9 @@ package com.example.vickey;
 
 
 public enum SubscriptionType {
-    BASIC("Vickey Basic 구독", 9500),
-    STANDARD("Vickey Standard 구독", 12000),
-    PREMIUM("Vickey Premium 구독", 14500);
+    BASIC("Vickey Basic 구독", 9900),
+    STANDARD("Vickey Standard 구독", 11900),
+    PREMIUM("Vickey Premium 구독", 14900);
 
     private final String name;
     private final int price;

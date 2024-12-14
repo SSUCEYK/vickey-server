@@ -1,18 +1,18 @@
 package com.example.vickey.api;
 
+import com.example.vickey.dto.EpisodeDTO;
 import com.example.vickey.dto.LikedVideosResponse;
 import com.example.vickey.entity.Episode;
 import com.example.vickey.entity.Like;
 import com.example.vickey.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/likes")
@@ -26,16 +26,23 @@ public class LikeController {
     }
 
     @GetMapping("/user/{userId}/episodes")
-    public ResponseEntity<List<Episode>> getLikedEpisodes(@PathVariable String userId) {
+    public ResponseEntity<List<EpisodeDTO>> getLikedEpisodes(@PathVariable String userId) {
         List<Episode> likedEpisodes = likeService.getLikedEpisodes(userId);
 
-        if (likedEpisodes.isEmpty()) {
+        if (likedEpisodes==null || likedEpisodes.isEmpty()) {
             // likedEpisodes가 없는 경우 204 No Content 반환
+            System.out.println("likedEpisodes is Empty");
             return ResponseEntity.noContent().build();
         }
 
-        // likedEpisodes가 있는 경우 200 OK와 데이터 반환
-        return ResponseEntity.ok(likedEpisodes);
+        List<EpisodeDTO> episodeDTOs = likedEpisodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        System.out.println("episodeDTOs.size()=" + episodeDTOs.size());
+        System.out.println("episodeDTOs.get(0).getEpisodeId(): " + episodeDTOs.get(0).getEpisodeId());
+
+        return ResponseEntity.ok(episodeDTOs);
     }
 
     @GetMapping("/user/{userId}/episodes/{episodeId}")
@@ -47,6 +54,18 @@ public class LikeController {
     @GetMapping("/user/{userId}")
     public List<Like> getUserLikes(@PathVariable String userId) {
         return likeService.getUserLikes(userId);
+    }
+
+    @PostMapping("/user/{userId}/videos/{videoId}/like")
+    public ResponseEntity<Void> likeVideo(@PathVariable String userId, @PathVariable Long videoId) {
+        likeService.likeVideo(userId, videoId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/user/{userId}/videos/{videoId}/like")
+    public ResponseEntity<Void> unlikeVideo(@PathVariable String userId, @PathVariable Long videoId) {
+        likeService.unlikeVideo(userId, videoId);
+        return ResponseEntity.ok().build();
     }
 
 }

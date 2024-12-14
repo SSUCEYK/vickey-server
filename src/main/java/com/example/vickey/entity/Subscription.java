@@ -34,6 +34,14 @@ public class Subscription {
 
     }
 
+    public int getSubscriptionPrice() {
+        return this.subscriptionType.getPrice();
+    }
+
+    public String getSubscriptionName() {
+        return this.subscriptionType.getName();
+    }
+
     public void updateDate() {
         this.startDate = LocalDate.now();
         this.endDate = this.startDate.plusDays(31L);

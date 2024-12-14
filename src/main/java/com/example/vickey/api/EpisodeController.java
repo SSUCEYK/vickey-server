@@ -1,4 +1,5 @@
 package com.example.vickey.api;
+import com.example.vickey.dto.EpisodeDTO;
 import com.example.vickey.service.EpisodeService;
 
 import com.example.vickey.entity.Episode;
@@ -8,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // 서비스 계층에서 제공하는 메소드를 호출 (웹 요청 응답, 처리)
 @RestController
@@ -25,8 +28,21 @@ public class EpisodeController {
     }
 
     @GetMapping
-    public List<Episode> getAllEpisodes() {
-        return episodeService.getAllEpisodes();
+    public ResponseEntity<List<EpisodeDTO>> getAllEpisodes() {
+
+        List<Episode> episodes = episodeService.getAllEpisodes();
+
+        // episodes가 null일 경우 빈 리스트 반환
+        if (episodes == null || episodes.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        List<EpisodeDTO> episodeDTOs = episodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(episodeDTOs);
+
     }
 
     // 썸네일 업로드 : 바로 S3에 이미지 파일 업로드
@@ -62,10 +78,16 @@ public class EpisodeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Episode> getEpisodeById(@PathVariable("id") Long id) {
+    public ResponseEntity<EpisodeDTO> getEpisodeById(@PathVariable("id") Long id) {
         Optional<Episode> episode = episodeService.getEpisodeById(id);
-        return episode.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+
+        if (episode == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        EpisodeDTO episodeDTO = new EpisodeDTO(episode.get());
+
+        return ResponseEntity.ok(episodeDTO);
     }
 
     @GetMapping("/randomEpisodeIds")
@@ -76,32 +98,86 @@ public class EpisodeController {
 
     // randomEpisodes?n=4 -> 랜덤 에피소드 4개 리턴한다는 뜻
     @GetMapping("/randomEpisodes")
-    public ResponseEntity<List<Episode>> getRandomEpisodes(@RequestParam int n) {
-        System.out.println("EpisodeController.getRandomEpisodes: n=" + n);
-        List<Episode> randomEpisodes = episodeService.getRandomEpisodes(n);
-        return ResponseEntity.ok(randomEpisodes);
+    public ResponseEntity<List<EpisodeDTO>> getRandomEpisodes(@RequestParam int n) {
+        List<Episode> episodes = episodeService.getRandomEpisodes(n);
+
+        // episodes가 null일 경우 빈 리스트 반환
+        if (episodes == null || episodes.isEmpty()) {
+            System.out.println("getRandomEpisodes: return emptyList");
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        List<EpisodeDTO> episodeDTOs = episodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        System.out.println("episodeDTOs.size()=" + episodeDTOs.size());
+        System.out.println("episodeDTOs.get(0).getEpisodeId(): " + episodeDTOs.get(0).getEpisodeId());
+
+        return ResponseEntity.ok(episodeDTOs);
     }
 
     // chooseEpisode?n=4 -> 좋아요 가장 많은 4개 에피소드 리턴한다는 뜻
     @GetMapping("/topLikedEpisodes")
-    public ResponseEntity<List<Episode>> getTopNLikedEpisode(@RequestParam("n") int n) {
-        return  ResponseEntity.ok(episodeService.getTopNEpisodesByLikedCount(n));
+    public ResponseEntity<List<EpisodeDTO>> getTopNLikedEpisode(@RequestParam("n") int n) {
+        List<Episode> episodes = episodeService.getTopNEpisodesByLikedCount(n);
+
+        // episodes가 null일 경우 빈 리스트 반환
+        if (episodes == null || episodes.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        List<EpisodeDTO> episodeDTOs = episodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(episodeDTOs);
     }
 
     // /watchEpisode?n=4 -> 조회수 가장 많은 4개 에피소드 id 리턴한다는 뜻
     @GetMapping("/topWatchedEpisodes")
-    public ResponseEntity<List<Episode>> getTopNWatchedEpisode(@RequestParam("n") int n) {
-        return ResponseEntity.ok(episodeService.getTopNEpisodesByWatchedCount(n));
+    public ResponseEntity<List<EpisodeDTO>> getTopNWatchedEpisode(@RequestParam("n") int n) {
+        List<Episode> episodes = episodeService.getTopNEpisodesByWatchedCount(n);
+
+        // episodes가 null일 경우 빈 리스트 반환
+        if (episodes == null || episodes.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        List<EpisodeDTO> episodeDTOs = episodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(episodeDTOs);
     }
 
     @GetMapping({"/search"})
-    public List<Episode> searchEpisodes(@RequestParam String searchQuery) {
-        return episodeService.searchEpisodes(searchQuery);
+    public ResponseEntity<List<EpisodeDTO>> searchEpisodes(@RequestParam String searchQuery) {
+        List<Episode> episodes = episodeService.searchEpisodes(searchQuery);
+
+
+        // episodes가 null일 경우 빈 리스트 반환
+        if (episodes == null || episodes.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        List<EpisodeDTO> episodeDTOs = episodes.stream()
+                .map(EpisodeDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(episodeDTOs);
     }
 
     @GetMapping({"/contentInfo"})
-    public Episode contentInfoEpisodes(@RequestParam Long contentInfoQuery) {
-        return episodeService.contentInfoEpisodes(contentInfoQuery);
+    public ResponseEntity<EpisodeDTO> contentInfoEpisode(@RequestParam Long contentInfoQuery) {
+        Episode episode = episodeService.contentInfoEpisode(contentInfoQuery);
+
+        if (episode == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        EpisodeDTO episodeDTO = new EpisodeDTO(episode);
+        return ResponseEntity.ok(episodeDTO);
     }
 }
 

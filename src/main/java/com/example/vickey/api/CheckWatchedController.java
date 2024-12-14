@@ -4,10 +4,8 @@ package com.example.vickey.api;
 import com.example.vickey.dto.CheckWatchedResponse;
 import com.example.vickey.service.CheckWatchedService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +23,12 @@ public class CheckWatchedController {
     @GetMapping("/user/{userId}")
     public List<CheckWatchedResponse> getUserHistory(@PathVariable String userId) {
         return checkWatchedService.getUserHistory(userId);
+    }
+
+    @PostMapping("/user/{userId}/videos/{videoId}")
+    public ResponseEntity<Void> markVideoAsWatched(@PathVariable String userId, @PathVariable Long videoId) {
+        checkWatchedService.markAsWatched(userId, videoId);
+        return ResponseEntity.ok().build();
     }
 
 }
