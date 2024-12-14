@@ -31,5 +31,11 @@ public class CheckWatchedController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/user/{userId}/videos/{videoId}")
+    public ResponseEntity<Void> deleteUserHistory(@PathVariable String userId, @PathVariable Long videoId) {
+        checkWatchedService.deleteHistory(userId, videoId);
+        return ResponseEntity.ok().build();
+    }
+
 }
 

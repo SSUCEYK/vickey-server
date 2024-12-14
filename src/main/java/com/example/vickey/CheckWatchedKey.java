@@ -11,6 +11,14 @@ public class CheckWatchedKey implements Serializable {
     private String userId;
     private Long videoId;
 
+    public CheckWatchedKey() {
+    }
+
+    public CheckWatchedKey(String userId, Long videoId) {
+        this.userId = userId;
+        this.videoId = videoId;
+    }
+
     public String getUserId() {
         return userId;
     }

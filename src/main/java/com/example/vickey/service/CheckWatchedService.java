@@ -61,9 +61,7 @@ public class CheckWatchedService {
         System.out.println("Video: " + video.getVideoId() + ", " + video.getVideoNum() + ", " + video.getVideoUrl());
 
         // 2. CheckWatchedKey 생성 및 기존 데이터 조회
-        CheckWatchedKey key = new CheckWatchedKey();
-        key.setUserId(userId);
-        key.setVideoId(videoId);
+        CheckWatchedKey key = new CheckWatchedKey(userId, videoId);
 
         CheckWatched checkWatched = checkWatchedRepository.findById(key).orElse(new CheckWatched());
         checkWatched.setId(key);
@@ -84,5 +82,16 @@ public class CheckWatchedService {
         }
     }
 
+    public void deleteHistory(String userId, Long videoId) {
+
+        CheckWatchedKey key = new CheckWatchedKey(userId, videoId);
+        if (checkWatchedRepository.existsById(key)) {
+            checkWatchedRepository.deleteById(key);
+        } else {
+            throw new RuntimeException("History not found for userId: " + userId + " and videoId: " + videoId);
+        }
+        
+        //episode 조회수는 유지
+    }
 
 }

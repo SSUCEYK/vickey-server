@@ -6,6 +6,7 @@ import com.example.vickey.entity.Episode;
 import com.example.vickey.entity.Like;
 import com.example.vickey.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,4 +69,13 @@ public class LikeController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/videos/{videoId}/like-status")
+    public ResponseEntity<Boolean> isLikedByUser(@PathVariable Long videoId, @RequestParam String userId) {
+        try {
+            boolean isLiked = likeService.isLikedByUser(userId, videoId);
+            return ResponseEntity.ok(isLiked);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
