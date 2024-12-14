@@ -12,6 +12,7 @@ import com.example.vickey.repository.UserRepository;
 import com.example.vickey.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,4 +95,20 @@ public class CheckWatchedService {
         //episode 조회수는 유지
     }
 
+    @Transactional
+    public void addCheckWatched(String userId, Long videoId) {
+        // 1. Check_watched에 새 레코드 추가
+        CheckWatchedKey key = new CheckWatchedKey(userId, videoId);
+
+        CheckWatched newCheckWatched = new CheckWatched();
+        newCheckWatched.setId(key);
+        checkWatchedRepository.save(newCheckWatched);
+
+        // 2. 해당 videoId에 연결된 episodeId 조회
+        Long episodeId = videoRepository.findEpisodeIdByVideoId(videoId);
+        if (episodeId != null) {
+            // 3. Episode 테이블의 watch_count 업데이트
+            episodeRepository.incrementWatchCount(episodeId);
+        }
+    }
 }

@@ -1,89 +1,3 @@
---DROP TABLE IF EXISTS Likes CASCADE;
---DROP TABLE IF EXISTS Check_watched CASCADE;
---DROP TABLE IF EXISTS Videos CASCADE;
---DROP TABLE IF EXISTS Episode CASCADE;
---DROP TABLE IF EXISTS Users CASCADE;
---DROP TABLE IF EXISTS Subscription CASCADE;
---
----- +. 구독 테이블 (Subscription)
---CREATE TABLE Subscription (
---    id BIGINT PRIMARY KEY AUTO_INCREMENT,
---    user_id VARCHAR(255) UNIQUE,
---    start_date DATE NOT NULL,
---    end_date DATE NOT NULL,
---    subscription_type VARCHAR(50) NOT NULL
---);
---
----- 1. 사용자 테이블 (Users)
---CREATE TABLE Users (
---    user_id VARCHAR(255) PRIMARY KEY,
---    username VARCHAR(255),
---    email VARCHAR(255) UNIQUE,
---    password VARCHAR(255),
---    profile_picture_url LONGTEXT,
---    signup_date TIMESTAMP,
---    subscription_id BIGINT
---);
---
----- +. 외래 키 제약 조건 추가
---ALTER TABLE Users
---ADD CONSTRAINT fk_users_subscription
---FOREIGN KEY (subscription_id)
---REFERENCES Subscription(id)
---ON DELETE SET NULL;
---
---ALTER TABLE Subscription
---ADD CONSTRAINT fk_subscription_users
---FOREIGN KEY (user_id)
---REFERENCES Users(user_id)
---ON DELETE CASCADE;
---
----- 2. 에피소드 테이블 (Episode)
---CREATE TABLE Episode (
---    episode_id BIGINT PRIMARY KEY AUTO_INCREMENT,
---    title VARCHAR(255) NOT NULL,
---    episode_count INTEGER NOT NULL,
---    description TEXT,
---    released_date VARCHAR(255),
---    thumbnail_url LONGTEXT,
---    cast_list VARCHAR(255), -- cast가 예약어라 변경
---    like_count INTEGER,
---    watch_count INTEGER
---);
---
----- 3. 비디오 테이블 (Videos)
---CREATE TABLE Videos (
---    video_id BIGINT PRIMARY KEY AUTO_INCREMENT,
---    episode_id BIGINT,
---    video_url VARCHAR(255) NOT NULL,
---    duration INTEGER NOT NULL,
---    video_num INTEGER NOT NULL,
---    thumbnail_url VARCHAR(2083),  -- 추가
---    FOREIGN KEY (episode_id) REFERENCES Episode(episode_id) ON DELETE CASCADE
---);
---
----- 4. 시청기록 테이블 (Check_watched)
---CREATE TABLE Check_watched (
---    user_id VARCHAR(255),
---    video_id BIGINT,
---    watched_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
---    progress INTEGER NOT NULL,
---    PRIMARY KEY (user_id, video_id),
---    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
---    FOREIGN KEY (video_id) REFERENCES Videos(video_id) ON DELETE CASCADE
---);
---
----- 5. 좋아요 테이블 (Likes)
---CREATE TABLE Likes (
---    user_id VARCHAR(255),
---    video_id BIGINT,
---    created_at TIMESTAMP,
---    PRIMARY KEY (user_id, video_id),
---    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
---    FOREIGN KEY (video_id) REFERENCES Videos(video_id) ON DELETE CASCADE
---);
-
-
 INSERT INTO Subscription (user_id, start_date, end_date, subscription_type) VALUES
 ('1', '2023-12-01', '2024-01-01', 'PREMIUM'),
 ('2', '2023-12-01', '2024-01-01', 'STANDARD'),
@@ -267,12 +181,12 @@ INSERT INTO Check_watched (user_id, video_id, progress) VALUES
 ('3', 13, 45),
 ('4', 14, 85),
 ('5', 15, 100),
-('1', 23, 1),
-('2', 23, 1),
-('3', 23, 1),
-('4', 23, 1),
-('5', 23, 1),
-('6', 23, 1);
+('1', 26, 1),
+('2', 26, 1),
+('3', 26, 1),
+('4', 26, 1),
+('5', 26, 1),
+('6', 26, 1);
 
 INSERT INTO Likes (user_id, video_id) VALUES
 ('1', 1),
@@ -287,6 +201,15 @@ INSERT INTO Likes (user_id, video_id) VALUES
 ('2', 12),
 ('3', 13),
 ('4', 14),
-('5', 15);
+('5', 15),
+('1', 50),
+('2', 50),
+('3', 50),
+('4', 50),
+('5', 50),
+('6', 50),
+('7', 50),
+('8', 50);
 
-
+UPDATE Episode SET like_count = 13, watch_count = 13 WHERE episode_id = 1;
+UPDATE Episode SET like_count = 8, watch_count = 6 WHERE episode_id = 2;

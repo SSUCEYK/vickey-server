@@ -2,6 +2,7 @@ package com.example.vickey.api;
 
 
 import com.example.vickey.dto.CheckWatchedResponse;
+import com.example.vickey.dto.HistoryDTO;
 import com.example.vickey.service.CheckWatchedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,13 @@ public class CheckWatchedController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping
+    public ResponseEntity<String> addCheckWatched(@RequestBody HistoryDTO checkWatchedDto) {
+        checkWatchedService.addCheckWatched(
+                checkWatchedDto.getUserId(),
+                checkWatchedDto.getVideoId()
+        );
+        return ResponseEntity.ok("Check_watched added and watch count updated");
+    }
 }
 
