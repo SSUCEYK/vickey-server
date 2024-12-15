@@ -4,6 +4,8 @@ import com.example.vickey.dto.CheckWatchedResponse;
 import com.example.vickey.entity.Episode;
 import com.example.vickey.entity.User;
 import com.example.vickey.entity.Video;
+import com.example.vickey.CheckWatchedKey;
+import com.example.vickey.entity.CheckWatched;
 import com.example.vickey.repository.CheckWatchedRepository;
 import com.example.vickey.repository.EpisodeRepository;
 import com.example.vickey.repository.UserRepository;
