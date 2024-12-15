@@ -50,10 +50,16 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	compileOnly("org.projectlombok:lombok")
 
+	implementation("com.mysql:mysql-connector-j")
+
 	//Webflux
 	//implementation ("org.springframework.boot:spring-boot-starter-webflux")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType<Jar> {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

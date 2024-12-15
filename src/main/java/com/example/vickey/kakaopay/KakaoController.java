@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 public class KakaoController {
 
-    private final String baseUrl = "http://3.37.105.22:8080";
+    private final String baseUrl = "http://3.37.105.22";
 
     private final SubscriptionService subscriptionService;
     @Value("${kakao.secretKey}")

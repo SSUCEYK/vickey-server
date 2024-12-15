@@ -29,10 +29,10 @@ public class TossController {
             this.tossService.processPaymentWithBillingKey(billingKey, customerKey, subscriptionType);
             this.subscriptionService.createOrUpdateSubscription(customerKey, subscriptionType);
             this.tossService.scheduleNextBilling(billingKey, customerKey, subscriptionType, 31);
-            return "/paySuccess";
+            return "paySuccess";
         } catch (Exception var7) {
             model.addAttribute("message", var7.getMessage());
-            return "/payFail";
+            return "payFail";
         }
     }
 

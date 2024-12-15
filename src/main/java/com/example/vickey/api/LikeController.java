@@ -68,4 +68,10 @@ public class LikeController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/videos/{videoId}/like-status")
+    public ResponseEntity<Boolean> isLikedByUser(@PathVariable Long videoId, @RequestParam String userId) {
+        boolean isLiked = likeService.isLikedByUser(userId, videoId);
+        return ResponseEntity.ok(isLiked);
+    }
+
 }

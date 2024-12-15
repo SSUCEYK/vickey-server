@@ -6,7 +6,7 @@ import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -25,10 +25,10 @@ public class User {
     @Column(name = "profile_picture_url", columnDefinition = "LONGTEXT")
     private String profilePictureUrl;
 
-    @Column(name = "signup_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "signup_date", nullable = true, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime signupDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "subscription")
     private Subscription subscription;
 

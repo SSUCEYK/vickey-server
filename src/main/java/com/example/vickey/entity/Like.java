@@ -8,7 +8,7 @@ import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Likes")
+@Table(name = "likes")
 public class Like {
 
     @EmbeddedId
@@ -24,14 +24,14 @@ public class Like {
     @JoinColumn(name = "video_id")
     private Video video;
 
-    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime createdAt;
-
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+
 
     // Getters and setters
 
@@ -41,6 +41,9 @@ public class Like {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    public void setCreatedAt() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public LikeKey getId() {

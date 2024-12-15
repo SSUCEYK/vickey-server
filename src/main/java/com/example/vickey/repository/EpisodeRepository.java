@@ -18,7 +18,8 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query("SELECT COALESCE(MAX(e.episodeId), 0) FROM Episode e")
     int findMaxEpisodeId();
 
-    @Query(value = "SELECT * FROM Episode ORDER BY RANDOM() LIMIT :n", nativeQuery = true)
+    //nativeQuery라 table명 그대로 사용
+    @Query(value = "SELECT * FROM episode ORDER BY RAND() LIMIT :n", nativeQuery = true)
     List<Episode> findRandomEpisodes(@Param("n") int n);
 
     @Query("SELECT e FROM Episode e WHERE LOWER(e.title) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR LOWER(e.castList) LIKE LOWER(CONCAT('%', :searchQuery, '%'))")

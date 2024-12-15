@@ -107,10 +107,6 @@
             <span class="payment-text">카카오페이</span>
             <img src="https://developers.kakao.com/tool/resource/static/img/button/pay/payment_icon_yellow_small.png" alt="카카오페이 이미지">
         </div>
-        <div class="payment-option" id="naverPayOption" onclick="selectMethod('네이버페이')">
-            <span class="payment-text">네이버페이</span>
-            <img src="https://developers.pay.naver.com/img/logo/symbol/symbol_sq_npaygr_large.svg" alt="네이버페이 이미지">
-        </div>
     </div>
     <button class="confirm-button" onclick="confirmPayment()">결제하기</button>
 </div>
@@ -125,14 +121,11 @@
 
         document.getElementById('cardOption').classList.remove('selected');
         document.getElementById('kakaoPayOption').classList.remove('selected');
-        document.getElementById('naverPayOption').classList.remove('selected');
 
         if (method === '카드') {
             document.getElementById('cardOption').classList.add('selected');
         } else if (method === '카카오페이') {
             document.getElementById('kakaoPayOption').classList.add('selected');
-        } else if (method === '네이버페이') {
-            document.getElementById('naverPayOption').classList.add('selected');
         }
     }
 
@@ -147,10 +140,7 @@
             url = `/toss?uid=${uid}&subscriptionType=${subscriptionType}`;
         } else if (selectedMethod === '카카오페이') {
             url = `/ready?uid=${uid}&subscriptionType=${subscriptionType}`;
-        } else if (selectedMethod === '네이버페이') {
-            url = `/naver?uid=${uid}&subscriptionType=${subscriptionType}`;
         }
-
         window.location.href = url;
     }
 </script>

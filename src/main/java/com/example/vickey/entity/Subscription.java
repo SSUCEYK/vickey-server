@@ -8,6 +8,7 @@ import com.querydsl.core.annotations.QueryEntity;
 
 //@QueryEntity
 @Entity
+@Table(name = "subscription")
 public class Subscription {
 
     @Id
@@ -17,10 +18,14 @@ public class Subscription {
     @OneToOne(mappedBy = "subscription")
     private User user;
 
+    @Column(name = "start_date")
     private LocalDate startDate;
+
+    @Column(name = "end_date")
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "subscription_type")
     private SubscriptionType subscriptionType;
 
     public Subscription(User user, SubscriptionType subscriptionType) {

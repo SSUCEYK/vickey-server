@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -58,6 +59,7 @@ public class UserService {
             newUser.setEmail(email);
             newUser.setUsername(name);
             newUser.setProfilePictureUrl(profilePictureUrl);
+            newUser.setSignupDate(LocalDateTime.now());
             newUser.setPassword(""); // 저장X
 
             return userRepository.save(newUser);
@@ -75,12 +77,15 @@ public class UserService {
             newUser.setUserId(uid);
             newUser.setEmail(email);
             newUser.setPassword(""); // 저장X
+            newUser.setSignupDate(LocalDateTime.now());
             newUser.setProfilePictureUrl(profilePictureUrl);
 
             if (!Objects.equals(name, "")){
                 //name 입력 안들어오면 default값으로 설정
                 newUser.setUsername(name); 
             }
+
+            System.out.println("findOrCreateUser: user save: uid=" + uid + ", email=" + email + ", name=" + name);
             
             return userRepository.save(newUser);
         }
@@ -96,6 +101,7 @@ public class UserService {
         newUser.setUsername(email.split("@")[0]); // 이메일 앞부분을 기본 username으로 사용
         newUser.setEmail(email);
         newUser.setPassword("");
+        newUser.setSignupDate(LocalDateTime.now());
         return userRepository.save(newUser);
     }
 

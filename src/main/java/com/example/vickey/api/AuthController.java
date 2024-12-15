@@ -50,8 +50,12 @@ public class AuthController {
     public ResponseEntity<UserResponse> naverLogin(@RequestBody String accessToken) {
 
         UserResponse naverUser = naverService.verifyTokenAndGetUser(accessToken);
+        System.out.println("before DB Access: naverLogin: id=" + naverUser.getUserId() + ", name=" + naverUser.getName());
+
         User user = userService.findOrCreateUserById(naverUser.getUserId(), "", "", naverUser.getName());
         boolean isSubscribed = user.getSubscription() != null;
+
+        System.out.println("after DB Access: naverLogin: id=" + naverUser.getUserId() + ", name=" + naverUser.getName());
 
         return ResponseEntity.ok(new UserResponse(user.getUserId(), user.getUsername(), user.getEmail(), user.getProfilePictureUrl(), isSubscribed));
 

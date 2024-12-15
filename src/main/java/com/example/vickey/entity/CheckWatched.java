@@ -9,7 +9,7 @@ import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Check_watched")
+@Table(name = "check_watched")
 public class CheckWatched {
 
     @EmbeddedId
@@ -28,7 +28,7 @@ public class CheckWatched {
     @Column(nullable = false)
     private Integer progress = 0; //default값 설정
 
-    @Column(name = "watched_date", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "watched_date", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime watchedDate;
     
     @PrePersist
@@ -78,5 +78,9 @@ public class CheckWatched {
 
     public void setWatchedDate(LocalDateTime watchedDate) {
         this.watchedDate = watchedDate;
+    }
+
+    public void setWatchedDate() {
+        this.watchedDate = LocalDateTime.now();
     }
 }

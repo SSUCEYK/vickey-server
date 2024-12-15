@@ -32,12 +32,18 @@ public class SubscriptionService {
         if (subscription == null) {
             subscription = new Subscription(user, subscriptionType);
             user.updateSubscribe(subscription);
+
+            System.out.println("Subscription being saved: " + subscription);
             subscriptionRepository.save(subscription);
+            System.out.println("Subscription saved successfully");
+
         } else {
             subscription.updateType(subscriptionType);
             subscription.updateDate();
+            subscriptionRepository.save(subscription); // 기존 구독 업데이트 저장
         }
 
+        user.setSubscription(subscription);
         userRepository.save(user);
     }
 

@@ -75,6 +75,9 @@ public class UserController {
     public ResponseEntity<UserResponse> emailLogin(@RequestBody LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
         String name = email.substring(0, email.indexOf("@"));
+
+        System.out.println("email-login: email=" + email + ", name=" + name);
+
         User user = userService.findOrCreateUser(loginRequest.getUid(), email, "", name);
 
         boolean isSubscribed = user.getSubscription() != null;
