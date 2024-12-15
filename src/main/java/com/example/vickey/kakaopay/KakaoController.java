@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -107,4 +108,11 @@ public class KakaoController {
     public KakaoController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
+
+    @GetMapping("/fail")
+    public String failPage(Model model) {
+        model.addAttribute("message", "결제가 실패했습니다. 다시 시도해주세요.");
+        return "payFail";
+    }
+
 }

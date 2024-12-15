@@ -6,6 +6,7 @@ import com.example.vickey.entity.Episode;
 import com.example.vickey.entity.Like;
 import com.example.vickey.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

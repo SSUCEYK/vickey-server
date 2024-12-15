@@ -34,5 +34,14 @@ public interface LikeRepository extends JpaRepository<Like, LikeKey> {
     @Query("SELECT l FROM Like l WHERE l.user.userId = :userId AND l.video.videoId = :videoId")
     Optional<Like> findByUserIdAndVideoId(@Param("userId") String userId, @Param("videoId") Long videoId);
 
+
+    @Query("SELECT COUNT(l) FROM Like l WHERE l.video.videoId = :videoId")
+    int countLikesByVideoId(@Param("videoId") Long videoId);
+
+//    @Query("SELECT CASE WHEN COUNT(l) > 0 THEN true ELSE false END " +
+//            "FROM Like l WHERE l.id.userId = :userId AND l.id.videoId = :videoId")
+//    boolean existsByUserIdAndVideoId(@Param("userId") String userId, @Param("videoId") Long videoId);
+
     boolean existsById_UserIdAndId_VideoId(String userId, Long videoId);
+
 }

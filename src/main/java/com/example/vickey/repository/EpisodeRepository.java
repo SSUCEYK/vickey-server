@@ -2,6 +2,7 @@ package com.example.vickey.repository;
 
 import com.example.vickey.entity.Episode;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -32,12 +33,16 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     Episode findEpisodeWithVideos(@Param("contentInfoQuery")Long contentInfoQuery);
 
     // 좋아요 수 기준 상위 n개의 에피소드
-    @Query("SELECT e FROM Episode e ORDER BY e.likeCount DESC")
+    @Query("SELECT e FROM Episode e ORDER BY e.likeCount DESC LIMIT :n")
     List<Episode> findTopNEpisodesByLikeCount(@Param("n") int n);
 
     // 조회수 기준 상위 n개의 에피소드
-    @Query("SELECT e FROM Episode e ORDER BY e.watchCount DESC")
+    @Query("SELECT e FROM Episode e ORDER BY e.watchCount DESC LIMIT :n")
     List<Episode> findTopNEpisodesByWatchCount(@Param("n") int n);
+
+    @Modifying
+    @Query("UPDATE Episode e SET e.watchCount = e.watchCount + 1 WHERE e.episodeId = :episodeId")
+    void incrementWatchCount(@Param("episodeId") Long episodeId);
 
     // 추가적인 쿼리 메서드
 

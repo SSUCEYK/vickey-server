@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
@@ -34,21 +35,6 @@ public class CheckWatchedService {
         this.episodeRepository = episodeRepository;
         this.userRepository = userRepository;
     }
-
-//    public List<CheckWatchedResponse> getUserHistory(String userId) {
-//        List<CheckWatched> histories = checkWatchedRepository.findAllByUserId(userId);
-//
-//        return histories.stream().map(history -> {
-//
-//            CheckWatchedResponse response = new CheckWatchedResponse(history);
-//
-//            Long episodeId = history.getVideo().getEpisodeId();
-//            response.setEpisode(episodeService.getEpisodeById(episodeId)); // VideoId로 Episode 조회 후 Set
-//
-//            return response;
-//
-//        }).collect(Collectors.toList());
-//    }
 
     @Cacheable(value = "userHistory", key = "#userId")
     public List<CheckWatchedResponse> getUserHistory(String userId) {
@@ -79,5 +65,32 @@ public class CheckWatchedService {
         }
     }
 
+    public void deleteHistory(String userId, Long videoId) {
 
+        CheckWatchedKey key = new CheckWatchedKey(userId, videoId);
+        if (checkWatchedRepository.existsById(key)) {
+            checkWatchedRepository.deleteById(key);
+        } else {
+            throw new RuntimeException("History not found for userId: " + userId + " and videoId: " + videoId);
+        }
+
+        //episode 조회수는 유지
+    }
+
+    @Transactional
+    public void addCheckWatched(String userId, Long videoId) {
+        // 1. Check_watched에 새 레코드 추가
+        CheckWatchedKey key = new CheckWatchedKey(userId, videoId);
+
+        CheckWatched newCheckWatched = new CheckWatched();
+        newCheckWatched.setId(key);
+        checkWatchedRepository.save(newCheckWatched);
+
+        // 2. 해당 videoId에 연결된 episodeId 조회
+        Long episodeId = videoRepository.findEpisodeIdByVideoId(videoId);
+        if (episodeId != null) {
+            // 3. Episode 테이블의 watch_count 업데이트
+            episodeRepository.incrementWatchCount(episodeId);
+        }
+    }
 }
